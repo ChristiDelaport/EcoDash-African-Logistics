@@ -16,4 +16,14 @@ class Player {
     //pixels/sec^2 while a direction key is held
     this.dragFactor = 0.92; 
     //velocity multiplier applied each frame
-    this.maxSpeed = 220;  // pixels/sec
+    this.maxSpeed = 220;  //pixels/sec
+
+    //to determine radius for collision detection and rendering
+    this.radius = 14;
+
+    //energy management variables
+    this.batteryLevel = 100; //percent
+    this.maxBattery = 100;
+    this.drainRate = 6;  //percent/sec while thrusting
+    this.rechargeRate = 18; //percent/sec inside a solar microgrid zone
+  }
