@@ -3,7 +3,7 @@
 //NOTE: majority of base code was done before converting to github piece by piece then edited with github later
 
 class Player {
-    constructor(x, y) {
+  constructor(x, y) {
     //current world position on the canvas
     this.x = x;
     this.y = y;
@@ -15,9 +15,9 @@ class Player {
     this.facingAngle = 0; //radians, 0 = facing right
     this.thrustPower = 220;
     //pixels/sec^2 while a direction key is held
-    this.dragFactor = 0.92; 
+    this.dragFactor = 0.92;
     //velocity multiplier applied each frame
-    this.maxSpeed = 220;  //pixels/sec
+    this.maxSpeed = 220; //pixels/sec
 
     //to determine radius for collision detection and rendering
     this.radius = 14;
@@ -25,7 +25,7 @@ class Player {
     //energy management variables
     this.batteryLevel = 100; //percent
     this.maxBattery = 100;
-    this.drainRate = 6;  //percent/sec while thrusting
+    this.drainRate = 6; //percent/sec while thrusting
     this.rechargeRate = 18; //percent/sec inside a solar microgrid zone
   }
 
@@ -42,9 +42,8 @@ class Player {
     let inputX = (input.right ? 1 : 0) - (input.left ? 1 : 0);
     let inputY = (input.down ? 1 : 0) - (input.up ? 1 : 0);
 
-
     //if input key is pressed, compute the facing angle and apply thrust
-     if (inputX !== 0 || inputY !== 0) {
+    if (inputX !== 0 || inputY !== 0) {
       this.facingAngle = Math.atan2(inputY, inputX); //cal angle from movement vector
       accelX = Math.cos(this.facingAngle) * this.thrustPower; //hori acceleration component
       accelY = Math.sin(this.facingAngle) * this.thrustPower; //vert acceleration component
@@ -81,19 +80,41 @@ class Player {
 
     //recharge battery if inside a solar zone; otherwise drain if active thrusting
     if (inSolarZone) {
-        //rstore energy, capped at max battery capacity
-      this.batteryLevel = Math.min(this.maxBattery, this.batteryLevel + this.rechargeRate * dt);
+      //rstore energy, capped at max battery capacity
+      this.batteryLevel = Math.min(
+        this.maxBattery,
+        this.batteryLevel + this.rechargeRate * dt,
+      );
     } else if (isThrusting) {
-         //drain energy
+      //drain energy
       this.batteryLevel = Math.max(0, this.batteryLevel - this.drainRate * dt);
     }
     //return speed for stat tracking
-    return speed; 
+    return speed;
   }
 
   //prevents the player from moving outside the canvas boundaries
-   keepInBounds(width, height) {
-   
+  keepInBounds(width, height) {
     this.x = Math.max(this.radius, Math.min(width - this.radius, this.x));
     this.y = Math.max(this.radius, Math.min(height - this.radius, this.y));
   }
+
+  //draws the triangle drone shape onto the canvas pointing toward facingAngle.
+  draw(ctx) {
+    ctx.save();
+    //translate coord origin to player pos and rotate toward target angle
+    ctx.translate(this.x, this.y);
+    ctx.rotate(this.facingAngle);
+
+    //draw triangle pointing toward angle 0 (pting right)
+    ctx.fillStyle = "#2f6b3a";
+    ctx.beginPath();
+    ctx.moveTo(this.radius, 0); //front tip
+    ctx.lineTo(-this.radius, -this.radius * 0.7); //top rear wing tip
+    ctx.lineTo(-this.radius, this.radius * 0.7); //bottom rear wing tip
+    ctx.closePath();
+    ctx.fill();
+
+    ctx.restore();
+  }
+}
