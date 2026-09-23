@@ -74,3 +74,19 @@ class Player {
       this.velocityX *= scale;
       this.velocityY *= scale;
     }
+
+    //update current pos based on cal velocity and dt
+    this.x += this.velocityX * dt;
+    this.y += this.velocityY * dt;
+
+    //recharge battery if inside a solar zone; otherwise drain if active thrusting
+    if (inSolarZone) {
+        //rstore energy, capped at max battery capacity
+      this.batteryLevel = Math.min(this.maxBattery, this.batteryLevel + this.rechargeRate * dt);
+    } else if (isThrusting) {
+         //drain energy
+      this.batteryLevel = Math.max(0, this.batteryLevel - this.drainRate * dt);
+    }
+    //return speed for stat tracking
+    return speed; 
+  }
