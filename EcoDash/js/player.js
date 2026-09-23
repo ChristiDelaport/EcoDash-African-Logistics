@@ -49,3 +49,10 @@ class Player {
       accelY = Math.sin(this.facingAngle) * this.thrustPower; //vert acceleration component
       isThrusting = true;
     }
+
+    //disable engine thrust completely if the battery is depleted
+    if (this.batteryLevel <= 0) {
+      accelX = 0;
+      accelY = 0;
+      isThrusting = false;
+    }
