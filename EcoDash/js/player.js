@@ -27,3 +27,11 @@ class Player {
     this.drainRate = 6;  //percent/sec while thrusting
     this.rechargeRate = 18; //percent/sec inside a solar microgrid zone
   }
+
+  // dt = delta time in seconds, input = {up,down,left,right}, inSolarZone = bool
+  /*(updates physics, handles directional input, applies energy consumption/recharge, 
+ and cals movement per frame)*/
+  update(dt, input, inSolarZone) {
+    let accelX = 0;
+    let accelY = 0;
+    let isThrusting = false;
