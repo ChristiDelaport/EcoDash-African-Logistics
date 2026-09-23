@@ -1,5 +1,6 @@
 //player.js
 //reps the delivery drone
+//NOTE: majority of base code was done before converting to github piece by piece then edited with github later
 
 class Player {
     constructor(x, y) {
@@ -56,3 +57,11 @@ class Player {
       accelY = 0;
       isThrusting = false;
     }
+
+    // velocity over time (dt)
+    this.velocityX += accelX * dt;
+    this.velocityY += accelY * dt;
+
+    //apply drag so the vehicle decelerates smoothly instead of stopping instantly
+    this.velocityX *= this.dragFactor;
+    this.velocityY *= this.dragFactor;
