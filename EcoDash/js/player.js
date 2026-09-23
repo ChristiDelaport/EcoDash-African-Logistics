@@ -40,3 +40,12 @@ class Player {
     // Math.cos()/Math.sin() drive the motion
     let inputX = (input.right ? 1 : 0) - (input.left ? 1 : 0);
     let inputY = (input.down ? 1 : 0) - (input.up ? 1 : 0);
+
+
+    //if input key is pressed, compute the facing angle and apply thrust
+     if (inputX !== 0 || inputY !== 0) {
+      this.facingAngle = Math.atan2(inputY, inputX); //cal angle from movement vector
+      accelX = Math.cos(this.facingAngle) * this.thrustPower; //hori acceleration component
+      accelY = Math.sin(this.facingAngle) * this.thrustPower; //vert acceleration component
+      isThrusting = true;
+    }
