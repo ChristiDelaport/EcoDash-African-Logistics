@@ -93,7 +93,7 @@ class Player {
 
   //prevents the player from moving outside the canvas boundaries
    keepInBounds(width, height) {
-    //clamps pos between player radius and canvas boundary
+   
     this.x = Math.max(this.radius, Math.min(width - this.radius, this.x));
     this.y = Math.max(this.radius, Math.min(height - this.radius, this.y));
   }
