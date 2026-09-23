@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>EcoDash — Solar-Powered Medical Deliveries</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <div id="game-container">
+      <canvas id="gameCanvas" width="800" height="500"></canvas>
+
+      <!-- HUD (shown only during gameplay) -->
+      <div id="hud" class="hidden">
+        <div id="hud-left">
+          <p>Score: <span id="scoreValue">0</span></p>
+          <p>Distance: <span id="distanceValue">0</span> km</p>
+        </div>
+        <div id="hud-right">
+          <p>Battery</p>
+          <div id="battery-bar"><div id="battery-fill"></div></div>
+        </div>
+        <button id="pauseBtn">Pause</button>
+      </div>
+
+      <!-- Start screen -->
+      <div id="start-screen" class="screen">
+        <h1>EcoDash</h1>
+        <p class="subtitle">Solar-powered medical deliveries — rural Kenya</p>
+        <div class="instructions">
+          <p>Arrow keys / WASD to fly. Manage your solar battery.</p>
+          <p>Avoid potholes, rivers and wildlife on the way to the clinic.</p>
+        </div>
+        <button id="startBtn">Start mission</button>
+      </div>
+
+      <!-- Pause screen -->
+      <div id="pause-screen" class="screen hidden">
+        <h1>Paused</h1>
+        <button id="resumeBtn">Resume</button>
+        <button id="restartFromPauseBtn">Restart</button>
+      </div>
+
+      <!-- Game over screen -->
+      <div id="gameover-screen" class="screen hidden">
+        <h1>Mission ended</h1>
+        <div class="instructions">
+          <p>Final score: <span id="finalScore">0</span></p>
+          <p>Distance travelled: <span id="finalDistance">0</span> km</p>
+          <p>High score: <span id="highScore">0</span></p>
+        </div>
+        <button id="restartBtn">Restart</button>
+      </div>
+    </div>
+
+    <script src="js/player.js"></script>
+    <script src="js/game.js"></script>
+    <script src="js/main.js"></script>
+  </body>
+</html>
