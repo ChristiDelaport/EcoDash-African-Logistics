@@ -35,3 +35,8 @@ class Player {
     let accelX = 0;
     let accelY = 0;
     let isThrusting = false;
+
+    //build a direction vector from input, then derive an angle:
+    // Math.cos()/Math.sin() drive the motion
+    let inputX = (input.right ? 1 : 0) - (input.left ? 1 : 0);
+    let inputY = (input.down ? 1 : 0) - (input.up ? 1 : 0);
