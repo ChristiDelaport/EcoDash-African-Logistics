@@ -65,3 +65,12 @@ class Player {
     //apply drag so the vehicle decelerates smoothly instead of stopping instantly
     this.velocityX *= this.dragFactor;
     this.velocityY *= this.dragFactor;
+
+    //clamp to a maximum speed.
+    //cal total speed vector length (hypotenuse) and cap it at maxSpeed
+    let speed = Math.hypot(this.velocityX, this.velocityY);
+    if (speed > this.maxSpeed) {
+      let scale = this.maxSpeed / speed; //uniform scaling
+      this.velocityX *= scale;
+      this.velocityY *= scale;
+    }
