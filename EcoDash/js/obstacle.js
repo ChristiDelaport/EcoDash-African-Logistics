@@ -74,3 +74,70 @@ class Obstacle {
         ctx.textBaseline = 'middle';
         ctx.fillText('🦒', this.x + this.width / 2, this.y + this.height * 0.65);
         break;
+
+    
+      // -- TRADITIONAL AFRICAN HUT (Clay Base + Thatch Roof) --
+      case 'hut':
+        const centerX = this.x + this.width / 2;
+        const radius = this.width / 2;
+
+        //base structure (circular body)
+        ctx.fillStyle = '#b45309'; //clay color
+        ctx.beginPath();
+        ctx.arc(centerX, this.y + radius * 0.9, radius * 0.85, 0, Math.PI * 2);
+        ctx.fill();
+
+        //door
+        ctx.fillStyle = '#451a03';
+        ctx.fillRect(centerX - 4, this.y + radius * 1.1, 8, 10);
+
+        //cone thatch roof (triangle layer overlay)
+        ctx.fillStyle = '#d97706'; //straw thatch yellow-orange
+        ctx.strokeStyle = '#78350f';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(centerX, this.y - 4); //roof peak
+        ctx.lineTo(this.x - 2, this.y + radius);
+        ctx.lineTo(this.x + this.width + 2, this.y + radius);
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+        break;
+
+       
+      //-- AFRICAN ACACIA TREE (Wide Canopy & Trunk)--
+     
+      case 'tree':
+        const trunkWidth = this.width * 0.2;
+        const trunkX = this.x + (this.width - trunkWidth) / 2;
+
+        //tree Trunk
+        ctx.fillStyle = '#5c3a21'; 
+        ctx.fillRect(trunkX, this.y + this.height * 0.4, trunkWidth, this.height * 0.6);
+
+        //flat-Topped Acacia Canopy (overlapping layered ovals)
+        ctx.fillStyle = '#2d5a27'; // Dark foliage green
+        
+        //base wide canopy
+        ctx.beginPath();
+        ctx.ellipse(
+          this.x + this.width / 2, 
+          this.y + this.height * 0.35, 
+          this.width / 2, 
+          this.height * 0.25, 
+          0, 0, Math.PI * 2
+        );
+        ctx.fill();
+
+        // Top accent canopy layer
+        ctx.fillStyle = '#3a7233'; //lighter foliage highlight
+        ctx.beginPath();
+        ctx.ellipse(
+          this.x + this.width / 2, 
+          this.y + this.height * 0.25, 
+          this.width * 0.35, 
+          this.height * 0.18, 
+          0, 0, Math.PI * 2
+        );
+        ctx.fill();
+        break;
