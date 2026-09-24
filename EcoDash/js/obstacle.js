@@ -44,3 +44,33 @@ class Obstacle {
         );
         ctx.stroke();
         break;
+
+    
+      // -- WILDLIFE (Acacia-tinted Wildlife Crossing Marker / Silhouette) --
+    
+      case 'wildlife':
+        //cautionary bg glow/zone
+        ctx.fillStyle = 'rgba(217, 119, 6, 0.2)';
+        ctx.beginPath();
+        ctx.arc(this.x + this.width / 2, this.y + this.height / 2, this.width / 2, 0, Math.PI * 2);
+        ctx.fill();
+
+        //draw warning sign triangle
+        ctx.fillStyle = '#f59e0b';
+        ctx.strokeStyle = '#78350f';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(this.x + this.width / 2, this.y);
+        ctx.lineTo(this.x, this.y + this.height);
+        ctx.lineTo(this.x + this.width, this.y + this.height);
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+
+        //wildlife symbol text/animal mark
+        ctx.fillStyle = '#000000';
+        ctx.font = 'bold 12px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('🦒', this.x + this.width / 2, this.y + this.height * 0.65);
+        break;
