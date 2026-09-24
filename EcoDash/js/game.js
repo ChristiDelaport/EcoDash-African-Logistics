@@ -84,13 +84,32 @@ class Game {
 
   //updtes based on the time(dt) since the last frame, player input, and whether the player is in the solar zone.also updates the player's pos, keeps them within canvas bounds, and cals score and distance traveled. If the player's battery lvl is depleted and they are not moving, it triggers a game over.
   update(dt) {
-    const speed = this.player.update(dt, this.input, this.isInSolarZone());
-    this.player.keepInBounds(this.canvas.width, this.canvas.height);
+    //1 track speed multiplier (defaults 1.0 = normal speed)
+    let speedMultiplier = 1.0;
 
+    //2 check for collisions with obstacles
     this.obstacles.forEach((obstacle) => {
       if (obstacle.checkCollision(this.player)) {
+        //apply the lowest speed factor among all collided obstacles
+        speedMultiplier = Math.min(speedMultiplier, obstacle.speedFactor);
+        //apply battery drain penalty over time (multiplied by dt)
+        if (obstacle.batteryDrain > 0) {
+          this.player.batteryLevel = Math.max(
+            0,
+            this.player.batteryLevel - obstacle.batteryDrain * dt,
+          );
+        }
       }
     });
+    //3 pass speedMultiplier into player update
+    const speed = this.player.update(
+      dt,
+      this.input,
+      this.isInSolarZone(),
+      speedMultiplier,
+    );
+
+    this.player.keepInBounds(this.canvas.width, this.canvas.height);
 
     this.distanceTravelled += (speed * dt) / 50; //arbitrary px-to-km scale
     this.score = Math.floor(this.distanceTravelled * 10);
