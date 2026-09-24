@@ -10,16 +10,15 @@ class Obstacle {
   }
 
   //draw context for obstacles
- draw(ctx) {
+  draw(ctx) {
     ctx.save();
 
     switch (this.type) {
-      
       // -- RIVER (Winding Blue Water Body) --
-    
-      case 'river':
-        ctx.fillStyle = '#2b7fff';
-        ctx.strokeStyle = '#1e5bb8';
+
+      case "river":
+        ctx.fillStyle = "#2b7fff";
+        ctx.strokeStyle = "#1e5bb8";
         ctx.lineWidth = 3;
 
         //draw a soft rounded river channel
@@ -29,35 +28,44 @@ class Obstacle {
         ctx.stroke();
 
         //decorative internal water current lines
-        ctx.strokeStyle = 'rgba(255, 255, 255, 0.5)';
+        ctx.strokeStyle = "rgba(255, 255, 255, 0.5)";
         ctx.lineWidth = 2;
         ctx.beginPath();
         ctx.moveTo(this.x + 10, this.y + this.height * 0.3);
         ctx.quadraticCurveTo(
-          this.x + this.width / 2, this.y + this.height * 0.1,
-          this.x + this.width - 10, this.y + this.height * 0.3
+          this.x + this.width / 2,
+          this.y + this.height * 0.1,
+          this.x + this.width - 10,
+          this.y + this.height * 0.3,
         );
         ctx.moveTo(this.x + 10, this.y + this.height * 0.7);
         ctx.quadraticCurveTo(
-          this.x + this.width / 2, this.y + this.height * 0.9,
-          this.x + this.width - 10, this.y + this.height * 0.7
+          this.x + this.width / 2,
+          this.y + this.height * 0.9,
+          this.x + this.width - 10,
+          this.y + this.height * 0.7,
         );
         ctx.stroke();
         break;
 
-    
       // -- WILDLIFE (Acacia-tinted Wildlife Crossing Marker / Silhouette) --
-    
-      case 'wildlife':
+
+      case "wildlife":
         //cautionary bg glow/zone
-        ctx.fillStyle = 'rgba(217, 119, 6, 0.2)';
+        ctx.fillStyle = "rgba(217, 119, 6, 0.2)";
         ctx.beginPath();
-        ctx.arc(this.x + this.width / 2, this.y + this.height / 2, this.width / 2, 0, Math.PI * 2);
+        ctx.arc(
+          this.x + this.width / 2,
+          this.y + this.height / 2,
+          this.width / 2,
+          0,
+          Math.PI * 2,
+        );
         ctx.fill();
 
         //draw warning sign triangle
-        ctx.fillStyle = '#f59e0b';
-        ctx.strokeStyle = '#78350f';
+        ctx.fillStyle = "#f59e0b";
+        ctx.strokeStyle = "#78350f";
         ctx.lineWidth = 2;
         ctx.beginPath();
         ctx.moveTo(this.x + this.width / 2, this.y);
@@ -68,32 +76,35 @@ class Obstacle {
         ctx.stroke();
 
         //wildlife symbol text/animal mark
-        ctx.fillStyle = '#000000';
-        ctx.font = 'bold 12px sans-serif';
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        ctx.fillText('🦒', this.x + this.width / 2, this.y + this.height * 0.65);
+        ctx.fillStyle = "#000000";
+        ctx.font = "bold 12px sans-serif";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText(
+          "🦒",
+          this.x + this.width / 2,
+          this.y + this.height * 0.65,
+        );
         break;
 
-    
       // -- TRADITIONAL AFRICAN HUT (Clay Base + Thatch Roof) --
-      case 'hut':
+      case "hut":
         const centerX = this.x + this.width / 2;
         const radius = this.width / 2;
 
         //base structure (circular body)
-        ctx.fillStyle = '#b45309'; //clay color
+        ctx.fillStyle = "#b45309"; //clay color
         ctx.beginPath();
         ctx.arc(centerX, this.y + radius * 0.9, radius * 0.85, 0, Math.PI * 2);
         ctx.fill();
 
         //door
-        ctx.fillStyle = '#451a03';
+        ctx.fillStyle = "#451a03";
         ctx.fillRect(centerX - 4, this.y + radius * 1.1, 8, 10);
 
         //cone thatch roof (triangle layer overlay)
-        ctx.fillStyle = '#d97706'; //straw thatch yellow-orange
-        ctx.strokeStyle = '#78350f';
+        ctx.fillStyle = "#d97706"; //straw thatch yellow-orange
+        ctx.strokeStyle = "#78350f";
         ctx.lineWidth = 2;
         ctx.beginPath();
         ctx.moveTo(centerX, this.y - 4); //roof peak
@@ -104,40 +115,68 @@ class Obstacle {
         ctx.stroke();
         break;
 
-       
       //-- AFRICAN ACACIA TREE (Wide Canopy & Trunk)--
-     
-      case 'tree':
+
+      case "tree":
         const trunkWidth = this.width * 0.2;
         const trunkX = this.x + (this.width - trunkWidth) / 2;
 
         //tree Trunk
-        ctx.fillStyle = '#5c3a21'; 
-        ctx.fillRect(trunkX, this.y + this.height * 0.4, trunkWidth, this.height * 0.6);
+        ctx.fillStyle = "#5c3a21";
+        ctx.fillRect(
+          trunkX,
+          this.y + this.height * 0.4,
+          trunkWidth,
+          this.height * 0.6,
+        );
 
         //flat-Topped Acacia Canopy (overlapping layered ovals)
-        ctx.fillStyle = '#2d5a27'; // Dark foliage green
-        
+        ctx.fillStyle = "#2d5a27"; // Dark foliage green
+
         //base wide canopy
         ctx.beginPath();
         ctx.ellipse(
-          this.x + this.width / 2, 
-          this.y + this.height * 0.35, 
-          this.width / 2, 
-          this.height * 0.25, 
-          0, 0, Math.PI * 2
+          this.x + this.width / 2,
+          this.y + this.height * 0.35,
+          this.width / 2,
+          this.height * 0.25,
+          0,
+          0,
+          Math.PI * 2,
         );
         ctx.fill();
 
         // Top accent canopy layer
-        ctx.fillStyle = '#3a7233'; //lighter foliage highlight
+        ctx.fillStyle = "#3a7233"; //lighter foliage highlight
         ctx.beginPath();
         ctx.ellipse(
-          this.x + this.width / 2, 
-          this.y + this.height * 0.25, 
-          this.width * 0.35, 
-          this.height * 0.18, 
-          0, 0, Math.PI * 2
+          this.x + this.width / 2,
+          this.y + this.height * 0.25,
+          this.width * 0.35,
+          this.height * 0.18,
+          0,
+          0,
+          Math.PI * 2,
         );
         ctx.fill();
         break;
+
+      default:
+        break;
+    }
+
+    ctx.restore();
+  }
+
+  //collision etection
+  //works for rectangular bounds against player radius
+
+  checkCollision(player) {
+    return (
+      player.x + player.radius > this.x &&
+      player.x - player.radius < this.x + this.width &&
+      player.y + player.radius > this.y &&
+      player.y - player.radius < this.y + this.height
+    );
+  }
+}
