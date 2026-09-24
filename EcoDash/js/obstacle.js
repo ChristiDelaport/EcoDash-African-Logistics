@@ -7,6 +7,33 @@ class Obstacle {
     this.width = width;
     this.height = height;
     this.type = type; //wildlife, river,houses etc
+
+    // Penalty profiles per hazard type
+    switch (type) {
+      case "river":
+        this.speedFactor = 0.6; //moderate drag from water currents
+        this.batteryDrain = 5.0; //high energy cost to traverse
+        break;
+      case "wildlife":
+        this.speedFactor = 0.2; //heavy slow-down to avoid collision
+        this.batteryDrain = 1.0;
+        break;
+      case "hut":
+        this.speedFactor = 0.1; //solid obstacle slowdown
+        this.batteryDrain = 2.0;
+        break;
+      case "tree":
+        this.speedFactor = 0.1; //near complete stop in foliage
+        this.batteryDrain = 2.0;
+        break;
+      case "load_shedding":
+        this.speedFactor = 1.0; //normal movement speed
+        this.batteryDrain = 15.0; //rapid battery drain during blackout
+        break;
+      default:
+        this.speedFactor = 1.0;
+        this.batteryDrain = 0;
+    }
   }
 
   //draw context for obstacles
