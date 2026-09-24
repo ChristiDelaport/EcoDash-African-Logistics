@@ -1,7 +1,11 @@
-* { box-sizing: border-box; margin: 0; padding: 0; }
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 
 body {
-  font-family: 'Segoe UI', Arial, sans-serif;
+  font-family: "Segoe UI", Arial, sans-serif;
   background: #1c2b1e;
   display: flex;
   align-items: center;
@@ -13,7 +17,7 @@ body {
   position: relative;
   width: 800px;
   height: 500px;
-  box-shadow: 0 0 20px rgba(0,0,0,0.5);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
 }
 
 canvas {
@@ -21,23 +25,29 @@ canvas {
   display: block;
 }
 
-.hidden { display: none !important; }
+.hidden {
+  display: none !important;
+}
 
 /* HUD */
 #hud {
   position: absolute;
-  top: 0; left: 0; right: 0;
+  top: 0;
+  left: 0;
+  right: 0;
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 10px 16px;
   color: #f4f1e6;
-  text-shadow: 0 1px 2px rgba(0,0,0,0.6);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
   font-size: 14px;
   pointer-events: none;
 }
 
-#hud button { pointer-events: auto; }
+#hud button {
+  pointer-events: auto;
+}
 
 #battery-bar {
   width: 100px;
@@ -51,22 +61,27 @@ canvas {
   height: 100%;
   width: 100%;
   background: #6aa84f;
-  transition: width 0.15s linear, background 0.3s;
+  transition:
+    width 0.15s linear,
+    background 0.3s;
 }
 
 #pauseBtn {
   padding: 6px 14px;
   border: none;
   border-radius: 4px;
-  background: rgba(0,0,0,0.5);
+  background: rgba(0, 0, 0, 0.5);
   color: #f4f1e6;
   cursor: pointer;
 }
 
-/* Screens (start / pause / game over) */
+/*screens (start / pause / game over) */
 .screen {
   position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   background: rgba(20, 30, 20, 0.9);
   color: #f4f1e6;
   display: flex;
@@ -82,9 +97,16 @@ canvas {
   color: #d9a441;
 }
 
-.subtitle { color: #cfcabb; font-size: 14px; }
+.subtitle {
+  color: #cfcabb;
+  font-size: 14px;
+}
 
-.instructions p { font-size: 13px; color: #cfcabb; margin: 2px 0; }
+.instructions p {
+  font-size: 13px;
+  color: #cfcabb;
+  margin: 2px 0;
+}
 
 .screen button {
   padding: 10px 24px;
@@ -97,4 +119,6 @@ canvas {
   cursor: pointer;
 }
 
-.screen button:hover { background: #7fc25f; }
+.screen button:hover {
+  background: #7fc25f;
+}
