@@ -13,11 +13,12 @@ class Player {
     this.velocityY = 0;
 
     this.facingAngle = 0; //radians, 0 = facing right
-    this.thrustPower = 220;
+
+    this.baseThrustPower = 220;
     //pixels/sec^2 while a direction key is held
     this.dragFactor = 0.92;
     //velocity multiplier applied each frame
-    this.maxSpeed = 220; //pixels/sec
+    this.baseMaxSpeed = 220; //pixels/sec
 
     //to determine radius for collision detection and rendering
     this.radius = 14;
@@ -32,7 +33,11 @@ class Player {
   // dt = delta time in seconds, input = {up,down,left,right}, inSolarZone = bool
   /*(updates physics, handles directional input, applies energy consumption/recharge, 
  and cals movement per frame)*/
-  update(dt, input, inSolarZone) {
+  update(dt, input, inSolarZone, speedMultiplier = 1.0) {
+    //scale thrust power and max top speed dynamically based on obstacle resistance
+    const currentThrust = this.baseThrustPower * speedMultiplier;
+    const currentMaxSpeed = this.baseMaxSpeed * speedMultiplier;
+
     let accelX = 0;
     let accelY = 0;
     let isThrusting = false;
@@ -45,8 +50,8 @@ class Player {
     //if input key is pressed, compute the facing angle and apply thrust
     if (inputX !== 0 || inputY !== 0) {
       this.facingAngle = Math.atan2(inputY, inputX); //cal angle from movement vector
-      accelX = Math.cos(this.facingAngle) * this.thrustPower; //hori acceleration component
-      accelY = Math.sin(this.facingAngle) * this.thrustPower; //vert acceleration component
+      accelX = Math.cos(this.facingAngle) * currentThrust; //hori acceleration component
+      accelY = Math.sin(this.facingAngle) * currentThrust; //vert acceleration component
       isThrusting = true;
     }
 
@@ -68,10 +73,11 @@ class Player {
     //clamp to a maximum speed.
     //cal total speed vector length (hypotenuse) and cap it at maxSpeed
     let speed = Math.hypot(this.velocityX, this.velocityY);
-    if (speed > this.maxSpeed) {
-      let scale = this.maxSpeed / speed; //uniform scaling
+    if (speed > currentMaxSpeed && speed > 0) {
+      let scale = currentMaxSpeed / speed; //uniform scaling
       this.velocityX *= scale;
       this.velocityY *= scale;
+      speed = currentMaxSpeed;
     }
 
     //update current pos based on cal velocity and dt
