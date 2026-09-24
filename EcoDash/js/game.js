@@ -11,6 +11,14 @@ class Game {
 
     this.player = new Player(canvas.width / 2, canvas.height / 2);
 
+    //obstacles array (link to obstacle.js)
+    this.obstacles = [
+      new Obstacle(200, 150, 120, 40, "river"),
+      new Obstacle(400, 320, 35, 35, "wildlife"),
+      new Obstacle(100, 350, 40, 40, "hut"),
+      new Obstacle(450, 220, 50, 50, "tree"), // <--- Acacia Tree
+    ];
+
     // placeholder solar microgrid zone; ( expand into an array of zones later)
     this.solarZone = { x: 40, y: 40, width: 160, height: 60 }; //
 
@@ -33,6 +41,15 @@ class Game {
     this.score = 0;
     this.distanceTravelled = 0;
     this.player = new Player(this.canvas.width / 2, this.canvas.height / 2);
+
+    //re-initialize obstacles
+    this.obstacles = [
+      new Obstacle(200, 150, 120, 40, "river"),
+      new Obstacle(400, 320, 35, 35, "wildlife"),
+      new Obstacle(100, 350, 40, 40, "hut"),
+      new Obstacle(450, 220, 50, 50, "tree"),
+    ];
+
     this.lastTimestamp = null;
     requestAnimationFrame(this.loop);
   }
@@ -70,6 +87,11 @@ class Game {
     const speed = this.player.update(dt, this.input, this.isInSolarZone());
     this.player.keepInBounds(this.canvas.width, this.canvas.height);
 
+    this.obstacles.forEach((obstacle) => {
+      if (obstacle.checkCollision(this.player)) {
+      }
+    });
+
     this.distanceTravelled += (speed * dt) / 50; //arbitrary px-to-km scale
     this.score = Math.floor(this.distanceTravelled * 10);
 
@@ -91,6 +113,11 @@ class Game {
     ctx.strokeStyle = "#d9a441";
     ctx.strokeRect(z.x, z.y, z.width, z.height);
 
+    this.player.draw(ctx);
+
+    //draw obstacles to the canvas
+    this.obstacles.forEach((obstacle) => obstacle.draw(ctx));
+    //draw player on top of ground elements
     this.player.draw(ctx);
   }
 
