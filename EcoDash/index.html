@@ -36,9 +36,16 @@
 
       <!-- Pause screen -->
       <div id="pause-screen" class="screen hidden">
-        <h1>Paused</h1>
-        <button id="resumeBtn">Resume</button>
-        <button id="restartFromPauseBtn">Restart</button>
+        <div class="modal-card">
+          <h1>Mission Paused</h1>
+          <p class="subtitle">Take a breather — your progress is holding.</p>
+          <div class="button-group">
+            <button id="resumeBtn" class="btn btn-primary">Resume</button>
+            <button id="restartFromPauseBtn" class="btn btn-secondary">
+              Restart Mission
+            </button>
+          </div>
+        </div>
       </div>
 
       <!-- Game over screen -->
