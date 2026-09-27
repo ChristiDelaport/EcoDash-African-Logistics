@@ -17,7 +17,7 @@ class Game {
 
     //dynamic gen layout on load
     this.generateSolarZones(2); //spawns 2 non-overlapping solar microgrids
-    this.generateObstacles(6);  //spawns 6 non-overlapping obstacles
+    this.generateObstacles(6); //spawns 6 non-overlapping obstacles
 
     //state tracking for keyboard input (up, down, left, right)
     this.input = { up: false, down: false, left: false, right: false };
@@ -53,8 +53,7 @@ class Game {
     });
   }
 
-  
-   //gen dynamic solar microgrid zones across map, ensuring they don't overlap with each other or the player spawn point. The count parameter determines how many zones to generate. 
+  //gen dynamic solar microgrid zones across map, ensuring they don't overlap with each other or the player spawn point. The count parameter determines how many zones to generate.
   generateSolarZones(count = 2) {
     this.solarZones = [];
     const zoneWidth = 140;
@@ -67,8 +66,12 @@ class Game {
       let x, y;
 
       while (!valid && attempts < 100) {
-        x = padding + Math.random() * (this.canvas.width - zoneWidth - padding * 2);
-        y = padding + Math.random() * (this.canvas.height - zoneHeight - padding * 2);
+        x =
+          padding +
+          Math.random() * (this.canvas.width - zoneWidth - padding * 2);
+        y =
+          padding +
+          Math.random() * (this.canvas.height - zoneHeight - padding * 2);
 
         if (!this.isOverlapping(x, y, zoneWidth, zoneHeight, this.solarZones)) {
           valid = true;
@@ -81,27 +84,43 @@ class Game {
       }
     }
   }
-    //obstacles array (link to obstacle.js)
-    this.obstacles = [
-      new Obstacle(200, 150, 120, 40, "river"),
-      new Obstacle(400, 320, 35, 35, "wildlife"),
-      new Obstacle(100, 350, 40, 40, "hut"),
-      new Obstacle(450, 220, 50, 50, "tree"), // <--- Acacia Tree
-    ];
 
-    // placeholder solar microgrid zone; ( expand into an array of zones later)
-    this.solarZone = { x: 40, y: 40, width: 160, height: 60 }; //
+  //gen random obstacles across the map, ensuring they don't overlap with each other or the player spawn point
+  generateObstacles(count = 6) {
+    this.obstacles = [];
+    const types = ["river", "wildlife", "hut", "tree"];
+    const padding = 20;
 
-    //state tracking for keyboard input (up, down, left, right)
-    this.input = { up: false, down: false, left: false, right: false };
+    for (let i = 0; i < count; i++) {
+      let attempts = 0;
+      let valid = false;
 
-    //progress tracking
-    this.score = 0;
-    this.distanceTravelled = 0;
+      while (!valid && attempts < 100) {
+        const type = types[Math.floor(Math.random() * types.length)];
 
-    // binds the loop function to ensure 'this' refers to the game instance during requestAnimationFrame
-    this.lastTimestamp = null;
-    this.loop = this.loop.bind(this);
+        let width = 45;
+        let height = 45;
+        if (type === "river") {
+          width = 120;
+          height = 40;
+        } else if (type === "hut") {
+          width = 50;
+          height = 50;
+        }
+
+        const x =
+          padding + Math.random() * (this.canvas.width - width - padding * 2);
+        const y =
+          padding + Math.random() * (this.canvas.height - height - padding * 2);
+
+        const allExisting = [...this.solarZones, ...this.obstacles];
+        if (!this.isOverlapping(x, y, width, height, allExisting)) {
+          this.obstacles.push(new Obstacle(x, y, width, height, type));
+          valid = true;
+        }
+        attempts++;
+      }
+    }
   }
 
   //starts the game loop and initializes game state
