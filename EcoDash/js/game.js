@@ -159,13 +159,14 @@ class Game {
 
   //checks if the player's position (x, y) falls within the rectangular bounds of the solar zone (top-left, right, and bottom edges)
   isInSolarZone() {
-    const z = this.solarZone;
-    return (
-      this.player.x > z.x &&
-      this.player.x < z.x + z.width &&
-      this.player.y > z.y &&
-      this.player.y < z.y + z.height
-    );
+    return this.solarZones.some((z) => {
+      return (
+        this.player.x > z.x &&
+        this.player.x < z.x + z.width &&
+        this.player.y > z.y &&
+        this.player.y < z.y + z.height
+      );
+    });
   }
 
   //updtes based on the time(dt) since the last frame, player input, and whether the player is in the solar zone.also updates the player's pos, keeps them within canvas bounds, and cals score and distance traveled. If the player's battery lvl is depleted and they are not moving, it triggers a game over.
