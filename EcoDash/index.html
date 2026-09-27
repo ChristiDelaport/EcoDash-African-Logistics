@@ -50,14 +50,25 @@
 
       <!-- Game over screen -->
       <div id="gameover-screen" class="screen hidden">
-        <h1>Mission ended</h1>
-        <div class="instructions">
-          <p>Final score: <span id="finalScore">0</span></p>
-          <p>Distance travelled: <span id="finalDistance">0</span> km</p>
-          <p>Energy efficiency: <span id="finalEfficiency">0.00</span> km/%</p>
-          <p>High score: <span id="highScore">0</span></p>
+        <div class="modal-card">
+          <h1 class="danger-title">Mission Ended</h1>
+          <p class="subtitle">
+            Your battery ran out before reaching the next charge point.
+          </p>
+          <div class="stats-panel">
+            <p>Final Score: <strong id="finalScore">0</strong></p>
+            <p>
+              Distance Travelled: <strong id="finalDistance">0.0</strong> km
+            </p>
+            <p>
+              Energy Efficiency: <strong id="finalEfficiency">0.00</strong> km/%
+            </p>
+            <p class="highlight-stat">
+              Personal Best: <strong id="highScore">0</strong>
+            </p>
+          </div>
+          <button id="restartBtn" class="btn btn-primary">Try Again</button>
         </div>
-        <button id="restartBtn">Restart</button>
       </div>
     </div>
 
