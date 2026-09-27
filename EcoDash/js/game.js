@@ -195,9 +195,6 @@ class Game {
       speedMultiplier,
     );
 
-    this.distanceTravelled = Math.max(0, (this.player.x - 150) / 100);
-    this.score = Math.floor(this.distanceTravelled * 10);
-
     //clamp Y-axis only (replaces old keepInBounds horizontal clamping)
     if (this.player.y < 20) this.player.y = 20;
     if (this.player.y > this.canvas.height - 20)
@@ -212,10 +209,21 @@ class Game {
     //lock cam offset 150px behind player's forward X position
     this.cameraX = this.player.x - 150;
 
+    //cal distance and score after clamping & camera positioning
+    this.distanceTravelled = Math.max(0, (this.player.x - 150) / 100);
+    this.score = Math.floor(this.distanceTravelled * 10);
+
+    //cal density factor based on progression along X-axis
+    //drops densityFactor from 1.0 (start) down to 0.3 (at 1000m distance)
+    const progression = Math.min(this.distanceTravelled / 1000, 1);
+    const densityFactor = 1 - progression * 0.7;
+
     //recycle obstacles ahead of the player as they pass behind the cam
     this.obstacles.forEach((obs) => {
       if (obs.x < this.cameraX - 100) {
-        obs.x = this.cameraX + this.canvas.width + 100 + Math.random() * 200;
+        const baseGap = 50 * densityFactor;
+        const randomGap = 150 * densityFactor * Math.random();
+        obs.x = this.cameraX + this.canvas.width + baseGap + randomGap;
         obs.y = 50 + Math.random() * (this.canvas.height - 100);
       }
     });
@@ -223,7 +231,11 @@ class Game {
     //recycle solar zones ahead of the player as they pass behind the cam
     this.solarZones.forEach((z) => {
       if (z.x + z.width < this.cameraX - 100) {
-        z.x = this.cameraX + this.canvas.width + 200 + Math.random() * 300;
+        //base gap shrinks as densityFactor drops
+        const baseGap = 100 * densityFactor;
+        const randomGap = 200 * densityFactor * Math.random();
+
+        z.x = this.cameraX + this.canvas.width + baseGap + randomGap;
         z.y = 50 + Math.random() * (this.canvas.height - 200);
       }
     });
