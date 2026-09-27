@@ -11,6 +11,26 @@ class Game {
 
     this.player = new Player(canvas.width / 2, canvas.height / 2);
 
+    //dynamic array & initial map generation for solar zones and obstacles
+    this.solarZones = [];
+    this.obstacles = [];
+
+    //dynamic gen layout on load
+    this.generateSolarZones(2); //spawns 2 non-overlapping solar microgrids
+    this.generateObstacles(6);  //spawns 6 non-overlapping obstacles
+
+    //state tracking for keyboard input (up, down, left, right)
+    this.input = { up: false, down: false, left: false, right: false };
+
+    //progress tracking
+    this.score = 0;
+    this.distanceTravelled = 0;
+
+    //binds the loop function to ensure 'this' refers to the game instance during requestAnimationFrame
+    this.lastTimestamp = null;
+    this.loop = this.loop.bind(this);
+  }
+
     //obstacles array (link to obstacle.js)
     this.obstacles = [
       new Obstacle(200, 150, 120, 40, "river"),
