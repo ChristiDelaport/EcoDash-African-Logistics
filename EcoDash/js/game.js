@@ -132,12 +132,9 @@ class Game {
     this.player = new Player(this.canvas.width / 2, this.canvas.height / 2);
 
     //re-initialize obstacles
-    this.obstacles = [
-      new Obstacle(200, 150, 120, 40, "river"),
-      new Obstacle(400, 320, 35, 35, "wildlife"),
-      new Obstacle(100, 350, 40, 40, "hut"),
-      new Obstacle(450, 220, 50, 50, "tree"),
-    ];
+    //re-gen dynamic map elements on restart
+    this.generateSolarZones(2);
+    this.generateObstacles(6);
 
     this.lastTimestamp = null;
     requestAnimationFrame(this.loop);
@@ -214,14 +211,18 @@ class Game {
     const ctx = this.ctx;
     ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-    // Solar microgrid zone.
-    const z = this.solarZone;
-    ctx.fillStyle = "rgba(217, 164, 65, 0.35)"; //colors may change
-    ctx.fillRect(z.x, z.y, z.width, z.height);
-    ctx.strokeStyle = "#d9a441";
-    ctx.strokeRect(z.x, z.y, z.width, z.height);
+    //1 draw all dynamic solar microgrid zones
+    this.solarZones.forEach((z) => {
+      ctx.fillStyle = "rgba(217, 164, 65, 0.35)";
+      ctx.fillRect(z.x, z.y, z.width, z.height);
+      ctx.strokeStyle = "#d9a441";
+      ctx.lineWidth = 2;
+      ctx.strokeRect(z.x, z.y, z.width, z.height);
 
-    this.player.draw(ctx);
+      ctx.fillStyle = "#d9a441";
+      ctx.font = "bold 10px sans-serif";
+      ctx.fillText("SOLAR ZONE", z.x + 8, z.y + 18);
+    });
 
     //draw obstacles to the canvas
     this.obstacles.forEach((obstacle) => obstacle.draw(ctx));
