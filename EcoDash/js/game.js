@@ -9,8 +9,9 @@ class Game {
 
     this.state = "start"; //'start' ; 'playing' ; 'paused' ; 'gameover'
 
-    this.player = new Player(canvas.width / 2, canvas.height / 2);
+    this.player = new Player(150, canvas.height / 2);
 
+    this.cameraX = 0;
     //dynamic array & initial map generation for solar zones and obstacles
     this.solarZones = [];
     this.obstacles = [];
@@ -37,10 +38,10 @@ class Game {
    */
   isOverlapping(x, y, w, h, existingItems, minDistance = 40) {
     // 1. Keep away from center player spawn point
-    const spawnX = this.canvas.width / 2;
+    const spawnX = 150;
     const spawnY = this.canvas.height / 2;
     const distToSpawn = Math.hypot(x + w / 2 - spawnX, y + h / 2 - spawnY);
-    if (distToSpawn < 100) return true;
+    if (distToSpawn < 120) return true;
 
     // 2. Check overlap against existing objects
     return existingItems.some((item) => {
@@ -66,9 +67,7 @@ class Game {
       let x, y;
 
       while (!valid && attempts < 100) {
-        x =
-          padding +
-          Math.random() * (this.canvas.width - zoneWidth - padding * 2);
+        x = 300 + Math.random() * (this.canvas.width - zoneWidth);
         y =
           padding +
           Math.random() * (this.canvas.height - zoneHeight - padding * 2);
@@ -108,8 +107,7 @@ class Game {
           height = 50;
         }
 
-        const x =
-          padding + Math.random() * (this.canvas.width - width - padding * 2);
+        const x = 300 + Math.random() * (this.canvas.width - width);
         const y =
           padding + Math.random() * (this.canvas.height - height - padding * 2);
 
@@ -129,7 +127,8 @@ class Game {
     this.state = "playing";
     this.score = 0;
     this.distanceTravelled = 0;
-    this.player = new Player(this.canvas.width / 2, this.canvas.height / 2);
+    this.cameraX = 0; //rset cam pos on restart
+    this.player = new Player(150, this.canvas.height / 2);
 
     //re-initialize obstacles
     //re-gen dynamic map elements on restart
@@ -196,11 +195,38 @@ class Game {
       speedMultiplier,
     );
 
-    this.player.keepInBounds(this.canvas.width, this.canvas.height);
-
-    this.distanceTravelled += (speed * dt) / 50; //arbitrary px-to-km scale
+    this.distanceTravelled = Math.max(0, (this.player.x - 150) / 100);
     this.score = Math.floor(this.distanceTravelled * 10);
 
+    //clamp Y-axis only (replaces old keepInBounds horizontal clamping)
+    if (this.player.y < 20) this.player.y = 20;
+    if (this.player.y > this.canvas.height - 20)
+      this.player.y = this.canvas.height - 20;
+
+    // prevent player from flying backwards off the left edge of the screen
+    if (this.player.x < this.cameraX + 20) {
+      this.player.x = this.cameraX + 20;
+      this.player.velocityX = 0;
+    }
+
+    //lock cam offset 150px behind player's forward X position
+    this.cameraX = this.player.x - 150;
+
+    //recycle obstacles ahead of the player as they pass behind the cam
+    this.obstacles.forEach((obs) => {
+      if (obs.x < this.cameraX - 100) {
+        obs.x = this.cameraX + this.canvas.width + 100 + Math.random() * 200;
+        obs.y = 50 + Math.random() * (this.canvas.height - 100);
+      }
+    });
+
+    //recycle solar zones ahead of the player as they pass behind the cam
+    this.solarZones.forEach((z) => {
+      if (z.x + z.width < this.cameraX - 100) {
+        z.x = this.cameraX + this.canvas.width + 200 + Math.random() * 300;
+        z.y = 50 + Math.random() * (this.canvas.height - 200);
+      }
+    });
     if (this.player.batteryLevel <= 0 && speed < 1) {
       // Stranded with an empty battery — placeholder end condition.
       this.gameOver();
@@ -211,6 +237,10 @@ class Game {
   draw() {
     const ctx = this.ctx;
     ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+    //save context state and translate cam view
+    ctx.save();
+    ctx.translate(-this.cameraX, 0);
 
     //1 draw all dynamic solar microgrid zones
     this.solarZones.forEach((z) => {
@@ -229,6 +259,8 @@ class Game {
     this.obstacles.forEach((obstacle) => obstacle.draw(ctx));
     //draw player on top of ground elements
     this.player.draw(ctx);
+
+    ctx.restore();
   }
 
   //hud update
