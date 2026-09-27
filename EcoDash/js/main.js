@@ -37,7 +37,16 @@ const keyMap = {
 window.addEventListener("keydown", (e) => {
   const action = keyMap[e.code];
   if (action) game.input[action] = true;
-  if (e.code === "Escape" && game.state === "playing") pauseGame();
+
+  //toggle pause with Escape or P key
+  if (e.code === "Escape" || e.code === "KeyP") {
+    if (game.state === "playing") {
+      pauseGame();
+    } else if (game.state === "paused") {
+      showOnly(null);
+      game.resume();
+    }
+  }
 });
 //REF:(e.code)  https://itsourcecode.com/javascript-tutorial/what-is-the-e-in-javascript-functions-and-why-is-it-important/
 
@@ -46,7 +55,7 @@ window.addEventListener("keyup", (e) => {
   if (action) game.input[action] = false;
 });
 
-// -Button input-
+// -Button listeners-
 document.getElementById("startBtn").addEventListener("click", () => {
   showOnly(null);
   game.start();
@@ -85,10 +94,18 @@ function onGameOver(gameInstance) {
   const highScore = Math.max(previousHigh, gameInstance.score); //compares previous high score to current score and sets the higher value to highScore
   localStorage.setItem(key, highScore);
 
-  //gameover screen display: final score, distance travelled, and high score
+  //cal energy efficiency: distance travelled per unit of battery depleted
+  const batteryUsed = 100 - Math.max(0, gameInstance.player.batteryLevel);
+  const efficiency =
+    batteryUsed > 0
+      ? (gameInstance.distanceTravelled / batteryUsed).toFixed(2)
+      : "0.00";
+
+  //gameover screen display: final score, distance travelled, and high score ADDED: energy efficiency
   document.getElementById("finalScore").textContent = gameInstance.score;
   document.getElementById("finalDistance").textContent =
     gameInstance.distanceTravelled.toFixed(1);
+  document.getElementById("finalEfficiency").textContent = efficiency;
   document.getElementById("highScore").textContent = highScore;
 
   showOnly("gameover");
