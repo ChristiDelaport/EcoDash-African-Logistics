@@ -31,6 +31,56 @@ class Game {
     this.loop = this.loop.bind(this);
   }
 
+  /**
+   * Helper to check if a new rectangular zone overlaps with existing zones,
+   * obstacles, or the player spawn point.
+   */
+  isOverlapping(x, y, w, h, existingItems, minDistance = 40) {
+    // 1. Keep away from center player spawn point
+    const spawnX = this.canvas.width / 2;
+    const spawnY = this.canvas.height / 2;
+    const distToSpawn = Math.hypot(x + w / 2 - spawnX, y + h / 2 - spawnY);
+    if (distToSpawn < 100) return true;
+
+    // 2. Check overlap against existing objects
+    return existingItems.some((item) => {
+      return (
+        x < item.x + item.width + minDistance &&
+        x + w + minDistance > item.x &&
+        y < item.y + item.height + minDistance &&
+        y + h + minDistance > item.y
+      );
+    });
+  }
+
+  
+   //gen dynamic solar microgrid zones across map, ensuring they don't overlap with each other or the player spawn point. The count parameter determines how many zones to generate. 
+  generateSolarZones(count = 2) {
+    this.solarZones = [];
+    const zoneWidth = 140;
+    const zoneHeight = 70;
+    const padding = 30;
+
+    for (let i = 0; i < count; i++) {
+      let attempts = 0;
+      let valid = false;
+      let x, y;
+
+      while (!valid && attempts < 100) {
+        x = padding + Math.random() * (this.canvas.width - zoneWidth - padding * 2);
+        y = padding + Math.random() * (this.canvas.height - zoneHeight - padding * 2);
+
+        if (!this.isOverlapping(x, y, zoneWidth, zoneHeight, this.solarZones)) {
+          valid = true;
+        }
+        attempts++;
+      }
+
+      if (valid) {
+        this.solarZones.push({ x, y, width: zoneWidth, height: zoneHeight });
+      }
+    }
+  }
     //obstacles array (link to obstacle.js)
     this.obstacles = [
       new Obstacle(200, 150, 120, 40, "river"),
