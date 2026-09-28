@@ -5,10 +5,32 @@
 const canvas = document.getElementById("gameCanvas");
 const game = new Game(canvas);
 
+//added ui dom binds
+
+const uiElements = {
+  scoreText:
+    document.getElementById("score-text") ||
+    document.getElementById("scoreText"),
+  distText:
+    document.getElementById("dist-text") || document.getElementById("distText"),
+  batteryFill:
+    document.getElementById("battery-fill") ||
+    document.getElementById("batteryFill"),
+  solarIndicator:
+    document.getElementById("solar-indicator") ||
+    document.getElementById("solarIndicator"),
+};
+
 const screens = {
-  start: document.getElementById("start-screen"),
-  pause: document.getElementById("pause-screen"),
-  gameover: document.getElementById("gameover-screen"),
+  start:
+    document.getElementById("start-screen") ||
+    document.getElementById("startScreen"),
+  pause:
+    document.getElementById("pause-screen") ||
+    document.getElementById("pauseScreen"),
+  gameover:
+    document.getElementById("gameover-screen") ||
+    document.getElementById("gameoverScreen"),
   hud: document.getElementById("hud"),
 };
 
@@ -55,6 +77,11 @@ window.addEventListener("keyup", (e) => {
   if (action) game.input[action] = false;
 });
 
+function addClickIfExist(id, callback) {
+  const btn = document.getElementById(id);
+  if (btn) btn.addEventListener("click", callback);
+}
+
 // -Button listeners-
 document.getElementById("startBtn").addEventListener("click", () => {
   showOnly(null);
@@ -83,6 +110,42 @@ function pauseGame() {
 function restartGame() {
   showOnly(null);
   game.start();
+}
+
+//per frame ui update func
+function updateUI(gameInstance) {
+  if (!gameInstance || !gameInstance.player) return;
+
+  //1 update Score & Distance
+  if (uiElements.scoreText)
+    uiElements.scoreText.textContent = gameInstance.score;
+  if (uiElements.distText)
+    uiElements.distText.textContent = gameInstance.distanceTravelled.toFixed(1);
+
+  //2 update Battery Fill Bar
+  if (uiElements.batteryFill) {
+    const batteryPct = Math.max(0, gameInstance.player.batteryLevel);
+    uiElements.batteryFill.style.width = batteryPct + "%";
+    if (batteryPct < 25) {
+      uiElements.batteryFill.style.backgroundColor = "#e53935"; // Red
+    } else if (batteryPct < 50) {
+      uiElements.batteryFill.style.backgroundColor = "#fdd835"; // Yellow
+    } else {
+      uiElements.batteryFill.style.backgroundColor = "#6aa84f"; // Green
+    }
+  }
+
+  //3toggle solar recharge zone indicator
+  if (uiElements.solarIndicator) {
+    if (
+      typeof gameInstance.isInSolarZone === "function" &&
+      gameInstance.isInSolarZone()
+    ) {
+      uiElements.solarIndicator.classList.remove("hidden");
+    } else {
+      uiElements.solarIndicator.classList.add("hidden");
+    }
+  }
 }
 
 //game loop called when state becomes "gameover"
