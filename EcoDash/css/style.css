@@ -115,6 +115,7 @@ canvas {
   box-shadow: 1px 1px 0px var(--ink-color);
 }
 
+/*updated features*/
 /*screens (start / pause / game over) */
 .screen {
   position: absolute;
@@ -122,43 +123,75 @@ canvas {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(20, 30, 20, 0.9);
-  color: #f4f1e6;
+  background: rgba(253, 251, 247, 0.95);
+  color: var(--ink-color);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   text-align: center;
   gap: 14px;
+  z-index: 10;
 }
 
 .screen h1 {
-  font-size: 32px;
-  color: #d9a441;
+  font-size: 3rem;
+  color: var(--ink-color);
+  text-decoration: underline;
+  letter-spacing: 1px;
 }
 
 .subtitle {
-  color: #cfcabb;
-  font-size: 14px;
+  color: var(--ink-color);
+  font-size: 1.2rem;
+  margin-top: -8px;
 }
 
 .instructions p {
-  font-size: 13px;
-  color: #cfcabb;
-  margin: 2px 0;
+  background: #ffffff;
+  border: 2px solid var(--ink-color);
+  border-radius: var(--border-rough);
+  padding: 12px 20px;
+  box-shadow: 3px 3px 0px var(--ink-color);
+  text-align: left;
+  max-width: 300px;
+}
+
+/*added*/
+.instructions h3 {
+  margin-bottom: 6px;
+  text-decoration: underline;
+}
+
+.instructions p,
+.instructions li {
+  font-size: 1rem;
+  color: var(--ink-color);
+  margin: 4px 0;
 }
 
 .screen button {
-  padding: 10px 24px;
-  border: none;
-  border-radius: 6px;
-  background: #6aa84f;
-  color: #10190f;
-  font-size: 14px;
+  font-family: "Architects Daughter", cursive;
+  font-size: 1.2rem;
   font-weight: bold;
+  color: var(--ink-color);
+  background: #ffffff;
+  border: 2px solid var(--ink-color);
+  border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+  padding: 10px 28px;
   cursor: pointer;
+  transition: all 0.1s ease;
+  box-shadow: 3px 3px 0px var(--ink-color);
+  min-width: 180px;
 }
 
 .screen button:hover {
-  background: #7fc25f;
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0px var(--ink-color);
+  background: #f0f0f0;
+}
+
+.screen button:active {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0px var(--ink-color);
 }
