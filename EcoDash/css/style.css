@@ -1,10 +1,12 @@
 :root {
-  --ink-color: #1b1712; /* Deep Acacia Charcoal (Pencil Ink) */
-  --paper-bg: #f5ebd2; /* Warm Kenyan Parchment / Sand */
-  --savanna-gold: #e59837; /* Warm African Sun Gold */
-  --terracotta-clay: #c85a32; /* Kenyan Red Clay Soil */
-  --accent-green: #487e47; /* Lush Wildlife Green */
-  --border-rough: 2.5px 5px 3.5px 3px / 3px 4px 3px 5px; /* Organic hand-drawn sketch border */
+  --ink-color: #1b1712;
+  --paper-bg: #f5ebd2;
+  --card-bg: #e9dbb9;
+  --overlay-bg: rgba(240, 226, 198, 0.96);
+  --savanna-gold: #e59837;
+  --terracotta-clay: #c85a32;
+  --accent-green: #487e47;
+  --border-rough: 2.5px 5px 3.5px 3px / 3px 4px 3px 5px;
 }
 
 * {
@@ -16,7 +18,7 @@
 body {
   font-family: "Architects Daughter", "Patrick Hand", cursive, sans-serif;
 
-  background: #1c2b1e;
+  background: #1c231a;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -36,7 +38,7 @@ body {
 }
 
 canvas {
-  background: #f8f4eb;
+  background: #b39245;
   display: block;
 }
 
@@ -62,12 +64,13 @@ canvas {
 }
 
 .wireframe-card {
-  background: #ffffff;
+  background: var(--card-bg);
   border: 2px solid var(--ink-color);
   border-radius: var(--border-rough);
   padding: 8px 14px;
   box-shadow: 2.5px 3px 0px var(--ink-color);
   pointer-events: auto;
+  color: var(--ink-color);
 }
 
 #hud button {
@@ -80,7 +83,7 @@ canvas {
   height: 18px;
   border: 2px solid var(--ink-color);
   border-radius: var(--border-rough);
-  background: #ffffff;
+  background: var(--card-bg);
   padding: 2px;
   box-shadow: 2px 2px 0px var(--ink-color);
   overflow: hidden;
@@ -101,7 +104,7 @@ canvas {
   font-size: 1rem;
   font-weight: bold;
   color: var(--ink-color);
-  background: #ffffff;
+  background: var(--card-bg);
   border: 2px solid var(--ink-color);
   border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
   padding: 6px 18px;
@@ -115,7 +118,7 @@ canvas {
 .sketch-btn:hover {
   transform: translate(-1px, -1px);
   box-shadow: 3.5px 3.5px 0px var(--ink-color);
-  background-color: #f0f0f0;
+  background-color: var(--savanna-gold);
 }
 
 #pauseBtn:active,
@@ -132,7 +135,7 @@ canvas {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(253, 251, 247, 0.95);
+  background: var(--overlay-bg);
   color: var(--ink-color);
   display: flex;
   flex-direction: column;
@@ -145,7 +148,7 @@ canvas {
 
 .screen h1 {
   font-size: 3rem;
-  color: var(--ink-color);
+  color: var(--terracotta-clay);
   text-decoration: underline;
   letter-spacing: 1px;
 }
@@ -157,7 +160,7 @@ canvas {
 }
 
 .instructions p {
-  background: #ffffff;
+  background: var(--card-bg);
   border: 2px solid var(--ink-color);
   border-radius: var(--border-rough);
   padding: 12px 20px;
@@ -170,6 +173,7 @@ canvas {
 .instructions h3 {
   margin-bottom: 6px;
   text-decoration: underline;
+  color: var(--terracotta-clay);
 }
 
 .instructions p,
@@ -184,7 +188,7 @@ canvas {
   font-size: 1.2rem;
   font-weight: bold;
   color: var(--ink-color);
-  background: #ffffff;
+  background: var(--terracotta-clay);
   border: 2px solid var(--ink-color);
   border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
   padding: 10px 28px;
@@ -197,7 +201,8 @@ canvas {
 .screen button:hover {
   transform: translate(-1px, -1px);
   box-shadow: 4px 4px 0px var(--ink-color);
-  background: #f0f0f0;
+  background-color: var(--savanna-gold);
+  color: var(--ink-color);
 }
 
 .screen button:active {
