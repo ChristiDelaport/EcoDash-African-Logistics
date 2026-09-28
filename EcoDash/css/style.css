@@ -1,3 +1,12 @@
+:root {
+  --ink-color: #1b1712; /* Deep Acacia Charcoal (Pencil Ink) */
+  --paper-bg: #f5ebd2; /* Warm Kenyan Parchment / Sand */
+  --savanna-gold: #e59837; /* Warm African Sun Gold */
+  --terracotta-clay: #c85a32; /* Kenyan Red Clay Soil */
+  --accent-green: #487e47; /* Lush Wildlife Green */
+  --border-rough: 2.5px 5px 3.5px 3px / 3px 4px 3px 5px; /* Organic hand-drawn sketch border */
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
