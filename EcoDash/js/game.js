@@ -320,6 +320,10 @@ class Game {
       // Stranded with an empty battery
       this.gameOver();
     }
+    //refresh ui elements
+    if (typeof updateUI === "function") {
+      updateUI(this);
+    }
   }
 
   //draws the game state to the canvas (solar zone and player)
