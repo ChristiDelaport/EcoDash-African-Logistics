@@ -186,6 +186,26 @@ class Game {
       if (obstacle.checkCollision(this.player)) {
         speedMultiplier = Math.min(speedMultiplier, obstacle.speedFactor);
 
+        //added audio from audio.js
+        this.obstacles.forEach((obstacle) => {
+          if (obstacle.checkCollision(this.player)) {
+            speedMultiplier = Math.min(speedMultiplier, obstacle.speedFactor);
+
+            if (!obstacle.hasHit) {
+              playObstacleSound(obstacle.type);
+              obstacle.hasHit = true;
+            }
+
+            if (obstacle.batteryDrain > 0) {
+              this.player.batteryLevel = Math.max(
+                0,
+                this.player.batteryLevel - obstacle.batteryDrain * dt,
+              );
+            }
+          } else {
+            obstacle.hasHit = false;
+          }
+        });
         if (obstacle.batteryDrain > 0) {
           this.player.batteryLevel = Math.max(
             0,
