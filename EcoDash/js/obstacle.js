@@ -50,7 +50,7 @@ class Obstacle {
 
         //draw a soft rounded river channel
         ctx.beginPath();
-        ctx.roundRect(this.x, this.y, this.width, this.height, 10);
+        ctx.Rect(this.x, this.y, this.width, this.height, 10);
         ctx.fill();
         ctx.stroke();
 
