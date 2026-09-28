@@ -17,8 +17,8 @@ class Game {
     this.obstacles = [];
 
     //dynamic gen layout on load
-    this.generateSolarZones(2); //spawns 2 non-overlapping solar microgrids
     this.generateObstacles(6); //spawns 6 non-overlapping obstacles
+    this.generateSolarZones(3); //spawns 3 non-overlapping solar microgrids
 
     //state tracking for keyboard input (up, down, left, right)
     this.input = { up: false, down: false, left: false, right: false };
@@ -36,15 +36,22 @@ class Game {
    * Helper to check if a new rectangular zone overlaps with existing zones,
    * obstacles, or the player spawn point.
    */
-  isOverlapping(x, y, w, h, existingItems, minDistance = 40) {
-    // 1. Keep away from center player spawn point
+  isOverlapping(x, y, w, h, existingItems = null, minDistance = 40) {
+    //1 keep away from center player spawn point
     const spawnX = 150;
     const spawnY = this.canvas.height / 2;
     const distToSpawn = Math.hypot(x + w / 2 - spawnX, y + h / 2 - spawnY);
     if (distToSpawn < 120) return true;
 
-    // 2. Check overlap against existing objects
-    return existingItems.some((item) => {
+    const itemsToCheck = existingItems || [
+      ...this.solarZones,
+      ...this.obstacles,
+    ];
+
+    // 2 check overlap against target objects
+    return itemsToCheck.some((item) => {
+      //exclude self-comparison during item recycling
+
       return (
         x < item.x + item.width + minDistance &&
         x + w + minDistance > item.x &&
@@ -72,7 +79,8 @@ class Game {
           padding +
           Math.random() * (this.canvas.height - zoneHeight - padding * 2);
 
-        if (!this.isOverlapping(x, y, zoneWidth, zoneHeight, this.solarZones)) {
+        const allExisting = [...this.solarZones, ...this.obstacles];
+        if (!this.isOverlapping(x, y, zoneWidth, zoneHeight, allExisting)) {
           valid = true;
         }
         attempts++;
@@ -132,8 +140,8 @@ class Game {
 
     //re-initialize obstacles
     //re-gen dynamic map elements on restart
-    this.generateSolarZones(2);
     this.generateObstacles(6);
+    this.generateSolarZones(3);
 
     this.lastTimestamp = null;
     requestAnimationFrame(this.loop);
@@ -176,9 +184,8 @@ class Game {
     //2 check for collisions with obstacles
     this.obstacles.forEach((obstacle) => {
       if (obstacle.checkCollision(this.player)) {
-        //apply the lowest speed factor among all collided obstacles
         speedMultiplier = Math.min(speedMultiplier, obstacle.speedFactor);
-        //apply battery drain penalty over time (multiplied by dt)
+
         if (obstacle.batteryDrain > 0) {
           this.player.batteryLevel = Math.max(
             0,
@@ -223,8 +230,34 @@ class Game {
       if (obs.x < this.cameraX - 100) {
         const baseGap = 50 * densityFactor;
         const randomGap = 150 * densityFactor * Math.random();
-        obs.x = this.cameraX + this.canvas.width + baseGap + randomGap;
-        obs.y = 50 + Math.random() * (this.canvas.height - 100);
+
+        let candidateX = this.cameraX + this.canvas.width + baseGap + randomGap;
+        let candidateY = 50 + Math.random() * (this.canvas.height - 100);
+        let attempts = 0;
+
+        //combine all obstacles and solar zones to check against
+        const allExisting = [...this.solarZones, ...this.obstacles].filter(
+          (o) => o !== obs,
+        );
+
+        //retry pos if candidate area overlaps any existing item
+        while (
+          this.isOverlapping(
+            candidateX,
+            candidateY,
+            obs.width || 45,
+            obs.height || 45,
+            allExisting,
+          ) &&
+          attempts < 10
+        ) {
+          candidateX += 50; //shift further right if overlapping
+          candidateY = 50 + Math.random() * (this.canvas.height - 100);
+          attempts++;
+        }
+
+        obs.x = candidateX;
+        obs.y = candidateY;
       }
     });
 
@@ -235,12 +268,36 @@ class Game {
         const baseGap = 100 * densityFactor;
         const randomGap = 200 * densityFactor * Math.random();
 
-        z.x = this.cameraX + this.canvas.width + baseGap + randomGap;
-        z.y = 50 + Math.random() * (this.canvas.height - 200);
+        let candidateX = this.cameraX + this.canvas.width + baseGap + randomGap;
+        let candidateY = 50 + Math.random() * (this.canvas.height - 200);
+        let attempts = 0;
+        //combine all obstacles and solar zones to check against
+        const allExisting = [...this.solarZones, ...this.obstacles].filter(
+          (item) => item !== z,
+        );
+
+        //retry pos if candidate area overlaps any existing item
+        while (
+          this.isOverlapping(
+            candidateX,
+            candidateY,
+            z.width || 140,
+            z.height || 70,
+            allExisting,
+          ) &&
+          attempts < 10
+        ) {
+          candidateX += 60; //shift further right if overlapping
+          candidateY = 50 + Math.random() * (this.canvas.height - 200);
+          attempts++;
+        }
+
+        z.x = candidateX;
+        z.y = candidateY;
       }
     });
     if (this.player.batteryLevel <= 0 && speed < 1) {
-      // Stranded with an empty battery — placeholder end condition.
+      // Stranded with an empty battery
       this.gameOver();
     }
   }
