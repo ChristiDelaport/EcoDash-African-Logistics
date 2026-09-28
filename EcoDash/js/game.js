@@ -62,7 +62,7 @@ class Game {
   }
 
   //gen dynamic solar microgrid zones across map, ensuring they don't overlap with each other or the player spawn point. The count parameter determines how many zones to generate.
-  generateSolarZones(count = 2) {
+  generateSolarZones(count = 3) {
     this.solarZones = [];
     const zoneWidth = 140;
     const zoneHeight = 70;
