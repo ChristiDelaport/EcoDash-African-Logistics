@@ -112,14 +112,52 @@ class Player {
     ctx.translate(this.x, this.y);
     ctx.rotate(this.facingAngle);
 
-    //draw triangle pointing toward angle 0 (pting right)
-    ctx.fillStyle = "#2f6b3a";
+    //updated drone
+    // main drone body
     ctx.beginPath();
-    ctx.moveTo(this.radius, 0); //front tip
-    ctx.lineTo(-this.radius, -this.radius * 0.7); //top rear wing tip
-    ctx.lineTo(-this.radius, this.radius * 0.7); //bottom rear wing tip
-    ctx.closePath();
+    ctx.arc(0, 0, 14, 0, Math.PI * 2);
     ctx.fill();
+    ctx.stroke();
+
+    //center red cross
+    ctx.strokeStyle = "#d93838"; // Bold red
+    ctx.lineWidth = 3;
+
+    //vert bar of red cross
+    ctx.beginPath();
+    ctx.moveTo(0, -7);
+    ctx.lineTo(0, 7);
+    ctx.stroke();
+
+    //hori bar of red cross
+    ctx.beginPath();
+    ctx.moveTo(-7, 0);
+    ctx.lineTo(7, 0);
+    ctx.stroke();
+    ctx.strokeStyle = "#1a1a1a";
+    ctx.lineWidth = 2;
+
+    //4 arms
+    const armLength = 20;
+    const armPositions = [
+      { x: -armLength, y: -armLength }, // Top-Left
+      { x: armLength, y: -armLength }, // Top-Right
+      { x: -armLength, y: armLength }, // Bottom-Left
+      { x: armLength, y: armLength }, // Bottom-Right
+    ];
+
+    armPositions.forEach((pos) => {
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.lineTo(pos.x, pos.y);
+      ctx.stroke();
+
+      //4 rotors
+      ctx.beginPath();
+      ctx.arc(pos.x, pos.y, 5, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
+    });
 
     ctx.restore();
   }
