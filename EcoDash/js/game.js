@@ -339,11 +339,11 @@ class Game {
     this.solarZones.forEach((z) => {
       ctx.fillStyle = "rgba(217, 164, 65, 0.35)";
       ctx.fillRect(z.x, z.y, z.width, z.height);
-      ctx.strokeStyle = "#d9a441";
+      ctx.strokeStyle = "#6a5225";
       ctx.lineWidth = 2;
       ctx.strokeRect(z.x, z.y, z.width, z.height);
 
-      ctx.fillStyle = "#d9a441";
+      ctx.fillStyle = "#e19911";
       ctx.font = "bold 10px sans-serif";
       ctx.fillText("SOLAR ZONE", z.x + 8, z.y + 18);
     });
